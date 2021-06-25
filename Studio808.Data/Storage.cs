@@ -1,12 +1,12 @@
-﻿using Studio808.Data.Interfaces;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using Studio808.Data.Interfaces;
 
 namespace Studio808.Data
 {
     public class Storage : IStorage
     {
         // Note: Temporarily use a concurrent dictionary to simulate a document collection.
-        ConcurrentDictionary<string, ConcurrentDictionary<string, string>> UserFriendsCollection { get; set; }
+        private ConcurrentDictionary<string, ConcurrentDictionary<string, string>> UserFriendsCollection { get; set; }
 
         public Storage()
         {

@@ -1,16 +1,16 @@
-using Studio808.Data;
-using Studio808.Data.Interfaces;
+using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Studio808.BusinessLogic.Components.User.Services.Interfaces;
-using Studio808.BusinessLogic.Components.User.Services;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
-using System.IO;
-using System;
+using Studio808.BusinessLogic.Components.User.Services;
+using Studio808.BusinessLogic.Components.User.Services.Interfaces;
+using Studio808.Data;
+using Studio808.Data.Interfaces;
 
 namespace Studio808.Api
 {
