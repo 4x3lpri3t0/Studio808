@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Components\UserComponents\Dtos\" />
+    <Folder Include="Components\UserComponents\Entities\" />
+    <Folder Include="Components\UserComponents\Services\Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Studio808.Base\Studio808.Base.csproj" />
+    <ProjectReference Include="..\Studio808.Data\Studio808.Data.csproj" />
+  </ItemGroup>
+
+</Project>
