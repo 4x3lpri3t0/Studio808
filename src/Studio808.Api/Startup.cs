@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Studio808.BusinessLogic.Components.User.Services.Interfaces;
+using Studio808.BusinessLogic.Components.User.Services;
 
 namespace Studio808.Api
 {
@@ -22,6 +24,7 @@ namespace Studio808.Api
             services.AddControllers();
 
             services.AddSingleton<IStorage, Storage>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

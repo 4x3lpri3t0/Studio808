@@ -5,9 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Components\UserComponents\Dtos\" />
-    <Folder Include="Components\UserComponents\Entities\" />
-    <Folder Include="Components\UserComponents\Services\Interfaces\" />
+    <Folder Include="Components\User\Dtos\" />
+    <Folder Include="Components\User\Entities\" />
   </ItemGroup>
 
   <ItemGroup>
