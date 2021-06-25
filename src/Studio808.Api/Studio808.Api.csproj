@@ -9,9 +9,5 @@
     <ProjectReference Include="..\..\Studio808.Data\Studio808.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 
 </Project>
