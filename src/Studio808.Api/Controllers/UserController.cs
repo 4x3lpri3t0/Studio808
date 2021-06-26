@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Studio808.Api.Requests;
+using Studio808.BusinessLogic.Components.UserComponent.Dtos;
+using Studio808.BusinessLogic.Components.UserComponent.Services.Interfaces;
+using Studio808.BusinessLogic.Helpers;
 
 namespace Studio808.Api.Controllers
 {
@@ -8,11 +12,20 @@ namespace Studio808.Api.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] string name)
+        private readonly IUserService userService;
+
+        public UserController(IUserService userService)
         {
-            // TODO
-            return Ok();
+            this.userService = userService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
+        {
+            // Create and store the new user.
+            var user = await userService.CreateUser(request.name).ConfigureAwait(false);
+
+            return Created(uri: "/", value: user.ToDto<UserDto>());
         }
 
         [HttpPut]

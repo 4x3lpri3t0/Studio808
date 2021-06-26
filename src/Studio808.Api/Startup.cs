@@ -1,14 +1,17 @@
 using System;
 using System.IO;
 using System.Reflection;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Studio808.BusinessLogic.Components.User.Services;
-using Studio808.BusinessLogic.Components.User.Services.Interfaces;
+using Studio808.Api.Configs;
+using Studio808.BusinessLogic.Components.UserComponent.Services;
+using Studio808.BusinessLogic.Components.UserComponent.Services.Interfaces;
+using Studio808.BusinessLogic.Helpers;
 using Studio808.Data;
 using Studio808.Data.Interfaces;
 
@@ -37,6 +40,10 @@ namespace Studio808.Api
 
             services.AddSingleton<IStorage, Storage>();
             services.AddScoped<IUserService, UserService>();
+
+            Assembly.Load("Studio808.BusinessLogic");
+            ServiceAutoConfig.Configure(services);
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +64,11 @@ namespace Studio808.Api
             {
                 endpoints.MapControllers();
             });
+
+            using (IServiceScope serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                ConvertToDto.Mapper = serviceScope.ServiceProvider.GetService<IMapper>();
+            }
         }
     }
 }

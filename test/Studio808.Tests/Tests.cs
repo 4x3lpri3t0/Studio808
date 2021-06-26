@@ -1,15 +1,12 @@
-using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Studio808.Api;
 using Studio808.Api.Requests;
-using Studio808.BusinessLogic.Components.User.Dtos;
+using Studio808.BusinessLogic.Components.UserComponent.Dtos;
 using Xunit;
 
 namespace Studio808.Tests
@@ -47,8 +44,8 @@ namespace Studio808.Tests
             var postUser2Response = await PostAsync(client, "user", createUser2Request, HttpStatusCode.Created);
 
             // Check that the created users match their intended names.
-            Assert.Equal(createUser1Request.name, postUser1Response.name);
-            Assert.Equal(createUser2Request.name, postUser2Response.name);
+            Assert.Equal(createUser1Request.name, postUser1Response.Name);
+            Assert.Equal(createUser2Request.name, postUser2Response.Name);
         }
 
         /// <summary>
