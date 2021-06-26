@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Studio808.Base", "Studio808
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Studio808.Data", "Studio808.Data\Studio808.Data.csproj", "{D464ECAA-D461-4950-AC8E-540D2204FF10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studio808.DataAccess", "Studio808.DataAccess\Studio808.DataAccess.csproj", "{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,18 @@ Global
 		{D464ECAA-D461-4950-AC8E-540D2204FF10}.Release|x64.Build.0 = Release|Any CPU
 		{D464ECAA-D461-4950-AC8E-540D2204FF10}.Release|x86.ActiveCfg = Release|Any CPU
 		{D464ECAA-D461-4950-AC8E-540D2204FF10}.Release|x86.Build.0 = Release|Any CPU
+		{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}.Debug|x64.Build.0 = Debug|Any CPU
+		{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}.Debug|x86.Build.0 = Debug|Any CPU
+		{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}.Release|x64.ActiveCfg = Release|Any CPU
+		{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}.Release|x64.Build.0 = Release|Any CPU
+		{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}.Release|x86.ActiveCfg = Release|Any CPU
+		{8FBC9D5E-D786-4765-8936-F9DCEC74AA14}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
