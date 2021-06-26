@@ -5,12 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Components\User\Dtos\" />
-    <Folder Include="Components\User\Entities\" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Studio808.Base\Studio808.Base.csproj" />
+    <ProjectReference Include="..\Studio808.DataAccess\Studio808.DataAccess.csproj" />
     <ProjectReference Include="..\Studio808.Data\Studio808.Data.csproj" />
   </ItemGroup>
 
