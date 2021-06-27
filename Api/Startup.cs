@@ -1,19 +1,19 @@
 using System;
 using System.IO;
 using System.Reflection;
+using Api.Configs;
 using AutoMapper;
+using BusinessLogic.Components.UserComponent.Services;
+using BusinessLogic.Components.UserComponent.Services.Interfaces;
+using BusinessLogic.Helpers;
+using Data.Storage;
+using Data.Storage.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Api.Configs;
-using BusinessLogic.Components.UserComponent.Services;
-using BusinessLogic.Components.UserComponent.Services.Interfaces;
-using BusinessLogic.Helpers;
-using Data.Storage;
-using Data.Storage.Interfaces;
 
 namespace Api
 {

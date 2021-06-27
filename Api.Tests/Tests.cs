@@ -1,14 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Api.Requests;
 using BusinessLogic.Components.UserComponent.Dtos;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 using static Tests.Helpers.TestHelper;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Api.Tests
 {

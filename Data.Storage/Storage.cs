@@ -16,7 +16,9 @@ namespace Data.Storage
     {
         // TODO/Note: Temporarily use these data structures to simulate persistent storage.
         private ConcurrentDictionary<Guid, string> UsersCollection { get; set; }
+
         private ConcurrentDictionary<Guid, GameState> GameStatesCollection { get; set; }
+
         private ConcurrentDictionary<Guid, HashSet<Guid>> FriendsCollection { get; set; }
 
         public Storage()

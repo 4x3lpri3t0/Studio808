@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 using Base.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Configs
 {

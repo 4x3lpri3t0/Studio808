@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Api.Requests;
 using BusinessLogic.Components.UserComponent.Dtos;
 using BusinessLogic.Components.UserComponent.Services.Interfaces;
 using BusinessLogic.Enums;
 using BusinessLogic.Helpers;
 using Data.Access.Entities;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
@@ -27,7 +27,6 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
-            // Create and store new user.
             User user;
             var operationStatus = await userService
                 .CreateUser(request.Name, out user)
@@ -38,7 +37,6 @@ namespace Api.Controllers
                 return BadRequest(operationStatus.ToString());
             }
 
-            // Success.
             return Created(uri: "/", value: user.ToDto<UserDto>());
         }
 
@@ -46,13 +44,11 @@ namespace Api.Controllers
         [Route("{userId}/state")]
         public async Task<IActionResult> SaveGameState(Guid userId, [FromBody] SaveGameStateRequest request)
         {
-            // Validations.
             if (!await UserExists(userId))
             {
                 return NotFound($"User with id {userId} does not exist.");
             }
 
-            // Store game state.
             GameState gameState;
             var operationStatus = await userService
                 .UpdateGameState(userId, request.GamesPlayed, request.Score, out gameState)
@@ -63,7 +59,6 @@ namespace Api.Controllers
                 return BadRequest(operationStatus.ToString());
             }
 
-            // Success.
             return Ok(value: gameState.ToDto<GameStateDto>());
         }
 
@@ -71,13 +66,11 @@ namespace Api.Controllers
         [Route("{userId}/state")]
         public async Task<IActionResult> LoadGameState(Guid userId)
         {
-            // Validations.
             if (!await UserExists(userId))
             {
                 return NotFound($"User with id {userId} does not exist.");
             }
 
-            // Retrieve game state.
             GameState gameState;
             var operationStatus = await userService
                 .GetGameState(userId, out gameState)
@@ -88,7 +81,6 @@ namespace Api.Controllers
                 return BadRequest(operationStatus.ToString());
             }
 
-            // Success.
             return Ok(value: gameState.ToDto<GameStateDto>());
         }
 
@@ -96,13 +88,11 @@ namespace Api.Controllers
         [Route("{userId}/friends")]
         public async Task<IActionResult> UpdateFriends(Guid userId, [FromBody] UpdateFriendsRequest request)
         {
-            // Validations.
             if (!await UserExists(userId))
             {
                 return NotFound($"User with id {userId} does not exist.");
             }
 
-            // Store new friends for user.
             HashSet<Guid> friends;
             var operationStatus = await userService
                 .UpdateFriends(userId, request.Friends, out friends)
@@ -113,7 +103,6 @@ namespace Api.Controllers
                 return BadRequest(operationStatus.ToString());
             }
 
-            // Success.
             var resultDto = new FriendsDto() { Friends = friends };
             return Ok(value: resultDto);
         }
@@ -122,16 +111,14 @@ namespace Api.Controllers
         [Route("{userId}/friends")]
         public async Task<IActionResult> GetFriends(Guid userId)
         {
-            // Validations.
             if (!await UserExists(userId))
             {
                 return NotFound($"User with id {userId} does not exist.");
             }
 
-            // Get user friends with their corresponding scores.
             List<FriendScore> friendScores;
             var operationStatus = await userService
-                .GetFriendScores(userId, out friendScores) // AXEL TODO: Parse toDto
+                .GetFriendScores(userId, out friendScores)
                 .ConfigureAwait(false);
 
             if (operationStatus != OperationStatus.Done)
@@ -139,19 +126,15 @@ namespace Api.Controllers
                 return BadRequest(operationStatus.ToString());
             }
 
-            // Success.
             var friendScoreDtoList = friendScores.Select(x => x.ToDto<FriendScoreDto>()).ToList();
             var resultDto = new FriendScoresDto() { FriendScores = friendScoreDtoList };
             return Ok(value: resultDto);
         }
 
         [HttpGet]
-        public async Task<IActionResult> DebugGetAllUsers()
+        public IActionResult DebugGetAllUsers()
         {
-            // Retrieve all users.
             var users = userService.DebugGetAllUsers();
-
-            // Success.
             return Ok(value: users);
         }
 
