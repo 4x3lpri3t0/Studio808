@@ -198,5 +198,46 @@ namespace Api.Tests
             Assert.NotEmpty(friendsResult.Friends);
             Assert.Equal(friends.Count, friendsResult.Friends.Count);
         }
+
+        [Fact]
+        public async Task Put_Friends_NonExistent()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            UserDto user = await CreateUser(client);
+            string url = $"user/{user.Id}/friends";
+            Guid nonExistentFriendId = Guid.NewGuid();
+            var friends = new List<Guid>() { nonExistentFriendId };
+            var request = new UpdateFriendsRequest(friends);
+
+            // Act
+            var friendsResult = await PutAsync<FriendsDto>(client, url, request, HttpStatusCode.OK);
+
+            // Assert
+            Assert.NotNull(friendsResult);
+            Assert.NotNull(friendsResult.Friends);
+            Assert.Empty(friendsResult.Friends); // 200 but don't store unexistent id.
+        }
+
+        [Fact]
+        public async Task Put_Friends_DuplicateIds()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            UserDto user = await CreateUser(client);
+            string url = $"user/{user.Id}/friends";
+            UserDto friend = await CreateUser(client);
+            var friends = new List<Guid>() { friend.Id, friend.Id }; // Duplicate ids.
+            var request = new UpdateFriendsRequest(friends);
+
+            // Act
+            var friendsResult = await PutAsync<FriendsDto>(client, url, request, HttpStatusCode.OK);
+
+            // Assert
+            Assert.NotNull(friendsResult);
+            Assert.NotNull(friendsResult.Friends);
+            Assert.NotEmpty(friendsResult.Friends);
+            Assert.Equal(1, friendsResult.Friends.Count); // Only one is stored.
+        }
     }
 }
