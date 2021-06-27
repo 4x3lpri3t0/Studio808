@@ -1,0 +1,309 @@
+{
+	"info": {
+		"_postman_id": "f5fd4192-d12b-43a0-abfe-f78de8ea7799",
+		"name": "Postman Collection Export",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmZTI1NDk2NC0wNDU0LTQ0ZGQtYjEwMi0yYWQ3MzIxZjFmYTEiLCJpc3MiOiJjb20uaHV0Y2hnYW1lcy5mb3JtdWxhcmFjaW5nIiwiZXhwIjoxNjA4MzEzNzkxMzcyLCJzY29wZSI6Il4vYXBpLy4qfF4vZGVidWcvYXBpLy4qIiwiYXBwVmVyc2lvbiI6IjEuMDkuMDAiLCJkZXZpY2VJZCI6IjQyOWYzZDI2OWRjOS00OTFiLWI2YjUtZjEwNzBlYTc1M2JkIiwidXNlcklkIjoiOTZlNzMzZjYtNThkZi00MjllLThkMWUtMmQ1MTdjNDkwYjg0IiwiaXNBZG1pbiI6ZmFsc2UsInRva2VuVHlwZSI6ImFjY2VzcyIsInNlcnZpY2VTZWNyZXRWZXJzaW9uIjoiMSIsInJlZ2lvbiI6IndlIiwiaWF0IjoxNjA4MzEwMTkxfQ.dl5dlVyk94kjwlUw8TpQgw47htHaouf4ucuyE-jt9Mc",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Hutch-App-Version",
+						"value": "1.08.00",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Hutch-Data-Version",
+						"value": "14",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Alice\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Game State",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmZTI1NDk2NC0wNDU0LTQ0ZGQtYjEwMi0yYWQ3MzIxZjFmYTEiLCJpc3MiOiJjb20uaHV0Y2hnYW1lcy5mb3JtdWxhcmFjaW5nIiwiZXhwIjoxNjA4MzEzNzkxMzcyLCJzY29wZSI6Il4vYXBpLy4qfF4vZGVidWcvYXBpLy4qIiwiYXBwVmVyc2lvbiI6IjEuMDkuMDAiLCJkZXZpY2VJZCI6IjQyOWYzZDI2OWRjOS00OTFiLWI2YjUtZjEwNzBlYTc1M2JkIiwidXNlcklkIjoiOTZlNzMzZjYtNThkZi00MjllLThkMWUtMmQ1MTdjNDkwYjg0IiwiaXNBZG1pbiI6ZmFsc2UsInRva2VuVHlwZSI6ImFjY2VzcyIsInNlcnZpY2VTZWNyZXRWZXJzaW9uIjoiMSIsInJlZ2lvbiI6IndlIiwiaWF0IjoxNjA4MzEwMTkxfQ.dl5dlVyk94kjwlUw8TpQgw47htHaouf4ucuyE-jt9Mc",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Hutch-App-Version",
+						"value": "1.08.00",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Hutch-Data-Version",
+						"value": "14",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"gamesPlayed\" : 2,\r\n    \"score\" : 1324123131\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/user/f2d422ef-fd57-42f4-a155-b792b1bfce62/state",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						"f2d422ef-fd57-42f4-a155-b792b1bfce62",
+						"state"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Game State",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmZTI1NDk2NC0wNDU0LTQ0ZGQtYjEwMi0yYWQ3MzIxZjFmYTEiLCJpc3MiOiJjb20uaHV0Y2hnYW1lcy5mb3JtdWxhcmFjaW5nIiwiZXhwIjoxNjA4MzEzNzkxMzcyLCJzY29wZSI6Il4vYXBpLy4qfF4vZGVidWcvYXBpLy4qIiwiYXBwVmVyc2lvbiI6IjEuMDkuMDAiLCJkZXZpY2VJZCI6IjQyOWYzZDI2OWRjOS00OTFiLWI2YjUtZjEwNzBlYTc1M2JkIiwidXNlcklkIjoiOTZlNzMzZjYtNThkZi00MjllLThkMWUtMmQ1MTdjNDkwYjg0IiwiaXNBZG1pbiI6ZmFsc2UsInRva2VuVHlwZSI6ImFjY2VzcyIsInNlcnZpY2VTZWNyZXRWZXJzaW9uIjoiMSIsInJlZ2lvbiI6IndlIiwiaWF0IjoxNjA4MzEwMTkxfQ.dl5dlVyk94kjwlUw8TpQgw47htHaouf4ucuyE-jt9Mc",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Hutch-App-Version",
+						"value": "1.08.00",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Hutch-Data-Version",
+						"value": "14",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/user/186c4444-c7f2-48c3-b97a-36c73d165627/state",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						"186c4444-c7f2-48c3-b97a-36c73d165627",
+						"state"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Friends",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmZTI1NDk2NC0wNDU0LTQ0ZGQtYjEwMi0yYWQ3MzIxZjFmYTEiLCJpc3MiOiJjb20uaHV0Y2hnYW1lcy5mb3JtdWxhcmFjaW5nIiwiZXhwIjoxNjA4MzEzNzkxMzcyLCJzY29wZSI6Il4vYXBpLy4qfF4vZGVidWcvYXBpLy4qIiwiYXBwVmVyc2lvbiI6IjEuMDkuMDAiLCJkZXZpY2VJZCI6IjQyOWYzZDI2OWRjOS00OTFiLWI2YjUtZjEwNzBlYTc1M2JkIiwidXNlcklkIjoiOTZlNzMzZjYtNThkZi00MjllLThkMWUtMmQ1MTdjNDkwYjg0IiwiaXNBZG1pbiI6ZmFsc2UsInRva2VuVHlwZSI6ImFjY2VzcyIsInNlcnZpY2VTZWNyZXRWZXJzaW9uIjoiMSIsInJlZ2lvbiI6IndlIiwiaWF0IjoxNjA4MzEwMTkxfQ.dl5dlVyk94kjwlUw8TpQgw47htHaouf4ucuyE-jt9Mc",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Hutch-App-Version",
+						"value": "1.08.00",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Hutch-Data-Version",
+						"value": "14",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"friends\": [\r\n        \"186c4444-c7f2-48c3-b97a-36c73d165627\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/user/186c4444-c7f2-48c3-b97a-36c73d165627/friends",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						"186c4444-c7f2-48c3-b97a-36c73d165627",
+						"friends"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Friends",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmZTI1NDk2NC0wNDU0LTQ0ZGQtYjEwMi0yYWQ3MzIxZjFmYTEiLCJpc3MiOiJjb20uaHV0Y2hnYW1lcy5mb3JtdWxhcmFjaW5nIiwiZXhwIjoxNjA4MzEzNzkxMzcyLCJzY29wZSI6Il4vYXBpLy4qfF4vZGVidWcvYXBpLy4qIiwiYXBwVmVyc2lvbiI6IjEuMDkuMDAiLCJkZXZpY2VJZCI6IjQyOWYzZDI2OWRjOS00OTFiLWI2YjUtZjEwNzBlYTc1M2JkIiwidXNlcklkIjoiOTZlNzMzZjYtNThkZi00MjllLThkMWUtMmQ1MTdjNDkwYjg0IiwiaXNBZG1pbiI6ZmFsc2UsInRva2VuVHlwZSI6ImFjY2VzcyIsInNlcnZpY2VTZWNyZXRWZXJzaW9uIjoiMSIsInJlZ2lvbiI6IndlIiwiaWF0IjoxNjA4MzEwMTkxfQ.dl5dlVyk94kjwlUw8TpQgw47htHaouf4ucuyE-jt9Mc",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Hutch-App-Version",
+						"value": "1.08.00",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Hutch-Data-Version",
+						"value": "14",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/user/186c4444-c7f2-48c3-b97a-36c73d165627/friends",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						"186c4444-c7f2-48c3-b97a-36c73d165627",
+						"friends"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Users (Debug)",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmZTI1NDk2NC0wNDU0LTQ0ZGQtYjEwMi0yYWQ3MzIxZjFmYTEiLCJpc3MiOiJjb20uaHV0Y2hnYW1lcy5mb3JtdWxhcmFjaW5nIiwiZXhwIjoxNjA4MzEzNzkxMzcyLCJzY29wZSI6Il4vYXBpLy4qfF4vZGVidWcvYXBpLy4qIiwiYXBwVmVyc2lvbiI6IjEuMDkuMDAiLCJkZXZpY2VJZCI6IjQyOWYzZDI2OWRjOS00OTFiLWI2YjUtZjEwNzBlYTc1M2JkIiwidXNlcklkIjoiOTZlNzMzZjYtNThkZi00MjllLThkMWUtMmQ1MTdjNDkwYjg0IiwiaXNBZG1pbiI6ZmFsc2UsInRva2VuVHlwZSI6ImFjY2VzcyIsInNlcnZpY2VTZWNyZXRWZXJzaW9uIjoiMSIsInJlZ2lvbiI6IndlIiwiaWF0IjoxNjA4MzEwMTkxfQ.dl5dlVyk94kjwlUw8TpQgw47htHaouf4ucuyE-jt9Mc",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Hutch-App-Version",
+						"value": "1.08.00",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Hutch-Data-Version",
+						"value": "14",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
