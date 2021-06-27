@@ -4,7 +4,7 @@
 
 When the game is started up the first (or reset) time it will create a new user. The game expects this call to return a user id.
 
-```
+```json
 POST /user
 {
   "name": "John"
@@ -13,7 +13,7 @@ POST /user
 
 #### Response
 
-```
+```json
 {
   "id": "18dd75e9-3d4a-48e2-bafc-3c8f95a8f0d1",
   "name": "John"
@@ -24,7 +24,7 @@ POST /user
 
 Whenever a game is played it will try to save its game state using this request.
 
-```
+```json
 PUT /user/<userid>/state
 {
   "gamesPlayed": 42,
@@ -36,13 +36,13 @@ PUT /user/<userid>/state
 
 On starting up the game it will load the game state. The score field should be considered to be the player's current highscore.
 
-```
+```json
 GET /user/<userid>/state
 ```
 
 #### Response
 
-```
+```json
 {
   "gamesPlayed": 42,
   "score": 358
@@ -53,7 +53,7 @@ GET /user/<userid>/state
 
 This request will only happen when the friend list actually changes. The request contains the full list of friends.
 
-```
+```json
 PUT /user/<userid>/friends
 {
   "friends": [
@@ -68,13 +68,13 @@ PUT /user/<userid>/friends
 
 This request is called upon starting the game and must return the games list of friends as well as their high scores (latest score as listed in the game state) to allow populating the high-score table.
 
-```
+```json
 GET /user/<userid>/friends
 ```
 
 #### Response
 
-```
+```json
 {
   "friends":[
     {
@@ -100,13 +100,13 @@ GET /user/<userid>/friends
 
 For now the game uses this request to get all users. Player can select who of these that he wants to be friends with. Obviously this will not scale at all; we will fix this later. For now just implement it as is.
 
-```
+```json
 GET /user
 ```
 
 #### Response
 
-```
+```json
 {
   "users":[
     {

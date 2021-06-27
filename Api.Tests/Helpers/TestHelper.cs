@@ -28,13 +28,14 @@ namespace Tests.Helpers
 
             string responseText = await response.Content.ReadAsStringAsync();
             var responseData = JsonSerializer.Deserialize<T>(responseText);
+
             return responseData;
         }
 
         /// <summary>
         /// Put an object and check the response headers.
         /// </summary>
-        internal static async Task PutAsync(
+        internal static async Task<HttpResponseMessage> PutAsync(
             HttpClient client, string url, object content, HttpStatusCode expectedCode)
         {
             string jsonAsString = JsonSerializer.Serialize(content);
@@ -43,6 +44,21 @@ namespace Tests.Helpers
 
             Assert.Equal(expectedCode, response.StatusCode);
             ValidateMediaType(response);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Get an object and deserialize to a custom type.
+        /// </summary>
+        internal static async Task<T> PutAsync<T>(
+            HttpClient client, string url, object content, HttpStatusCode expectedCode)
+        {
+            var response = await PutAsync(client, url, content, expectedCode);
+            string responseText = await response.Content.ReadAsStringAsync();
+            var responseData = JsonSerializer.Deserialize<T>(responseText);
+
+            return responseData;
         }
 
         /// <summary>
@@ -51,7 +67,7 @@ namespace Tests.Helpers
         internal static async Task<HttpResponseMessage> GetAsync(
             HttpClient client, string url, HttpStatusCode expectedCode)
         {
-            HttpResponseMessage response = await client.GetAsync(url);
+            var response = await client.GetAsync(url);
             Assert.Equal(expectedCode, response.StatusCode);
             ValidateMediaType(response);
 
@@ -67,13 +83,15 @@ namespace Tests.Helpers
             var response = await GetAsync(client, url, expectedCode);
             string responseText = await response.Content.ReadAsStringAsync();
             var responseData = JsonSerializer.Deserialize<T>(responseText);
+
             return responseData;
         }
 
-        internal static async Task<UserDto> CreateUser(HttpClient client)
+        // Create user with custom name. Assing Alice as default.
+        internal static async Task<UserDto> CreateUser(HttpClient client, string name = "Alice")
         {
             string userUrl = "user";
-            var userRequest = new CreateUserRequest("Alice");
+            var userRequest = new CreateUserRequest(name);
 
             return await PostAsync<UserDto>(client, userUrl, userRequest, HttpStatusCode.Created);
         }

@@ -7,6 +7,7 @@ using Api.Requests;
 using BusinessLogic.Components.UserComponent.Dtos;
 using Xunit;
 using static Tests.Helpers.TestHelper;
+using System.Collections.Generic;
 
 namespace Api.Tests
 {
@@ -111,7 +112,7 @@ namespace Api.Tests
             var gameStateRequest = new SaveGameStateRequest(10, 300);
 
             // Act + Assert
-            await PutAsync(client, url, gameStateRequest, HttpStatusCode.BadRequest);
+            await PutAsync(client, url, gameStateRequest, HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -175,6 +176,27 @@ namespace Api.Tests
             // Assert
             Assert.Equal(gamesPlayedNewValue, gameState.GamesPlayed);
             Assert.Equal(scoreNewValue, gameState.Score);
+        }
+
+        [Fact]
+        public async Task Put_Friends()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            UserDto user = await CreateUser(client);
+            string url = $"user/{user.Id}/friends";
+            UserDto friend = await CreateUser(client);
+            var friends = new List<Guid>() { friend.Id };
+            var request = new UpdateFriendsRequest(friends);
+
+            // Act
+            var friendsResult = await PutAsync<FriendsDto>(client, url, request, HttpStatusCode.OK);
+
+            // Assert
+            Assert.NotNull(friendsResult);
+            Assert.NotNull(friendsResult.Friends);
+            Assert.NotEmpty(friendsResult.Friends);
+            Assert.Equal(friends.Count, friendsResult.Friends.Count);
         }
     }
 }

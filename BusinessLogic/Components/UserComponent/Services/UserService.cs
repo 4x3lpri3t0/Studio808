@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.Components.UserComponent.Services.Interfaces;
 using BusinessLogic.Enums;
@@ -14,6 +16,15 @@ namespace BusinessLogic.Components.UserComponent.Services
         public UserService(IStorage storage)
         {
             this.storage = storage;
+        }
+
+        public Task<bool> UserExists(Guid userId)
+        {
+            var usersCollection = this.storage.GetUsersCollection();
+
+            bool found = usersCollection.ContainsKey(userId);
+
+            return Task.FromResult(found);
         }
 
         public Task<OperationStatus> CreateUser(string name, out User user)
@@ -32,7 +43,7 @@ namespace BusinessLogic.Components.UserComponent.Services
 
             // Create new user game state.
             var gameState = new GameState(0, 0);
-            var gameStateCollection = this.storage.GetUserGameStateCollection();
+            var gameStateCollection = this.storage.GetGameStatesCollection();
             successfulAdd = gameStateCollection.TryAdd(userId, gameState);
             if (!successfulAdd)
             {
@@ -44,12 +55,12 @@ namespace BusinessLogic.Components.UserComponent.Services
 
         public Task<OperationStatus> UpdateGameState(Guid userId, int gamesPlayed, long score, out GameState gameState)
         {
-            var gameStateCollection = this.storage.GetUserGameStateCollection();
+            var gameStatesCollection = this.storage.GetGameStatesCollection();
 
             gameState = new GameState(gamesPlayed, score);
 
             GameState expectedCurrentGameState;
-            bool successfulGet = gameStateCollection.TryGetValue(userId, out expectedCurrentGameState);
+            bool successfulGet = gameStatesCollection.TryGetValue(userId, out expectedCurrentGameState);
             if (!successfulGet)
             {
                 // Likely due to an incorrect user id.
@@ -62,7 +73,7 @@ namespace BusinessLogic.Components.UserComponent.Services
                 return Task.FromResult(OperationStatus.UnknownError);
             }
 
-            bool successfulUpdate = gameStateCollection.TryUpdate(userId, gameState, expectedCurrentGameState);
+            bool successfulUpdate = gameStatesCollection.TryUpdate(userId, gameState, expectedCurrentGameState);
             if (!successfulUpdate)
             {
                 // Concurrency issue due to race condition.
@@ -76,14 +87,31 @@ namespace BusinessLogic.Components.UserComponent.Services
 
         public Task<OperationStatus> GetGameState(Guid userId, out GameState gameState)
         {
-            var gameStateCollection = this.storage.GetUserGameStateCollection();
+            var gameStatesCollection = this.storage.GetGameStatesCollection();
 
-            bool successfulGet = gameStateCollection.TryGetValue(userId, out gameState);
+            bool successfulGet = gameStatesCollection.TryGetValue(userId, out gameState);
             if (!successfulGet)
             {
-                // Likely due to an incorrect user id.
+                // The user and its state might have been removed.
                 return Task.FromResult(OperationStatus.NotFound);
             }
+
+            return Task.FromResult(OperationStatus.Done);
+        }
+
+        public Task<OperationStatus> UpdateFriends(Guid userId, List<Guid> newFriendsList, out HashSet<Guid> friends)
+        {
+            var usersCollection = this.storage.GetUsersCollection();
+            var friendsCollection = this.storage.GetFriendsCollection();
+
+            // Keep only users that exist in db.
+            friends = newFriendsList
+                .Where(friendId => usersCollection.ContainsKey(friendId))
+                .ToHashSet();
+
+            // Using indexer because we don't care about old list - we just override it.
+            // Also, if the user didn't have a friends list yet, here is where it is initialized.
+            friendsCollection[userId] = friends;
 
             return Task.FromResult(OperationStatus.Done);
         }

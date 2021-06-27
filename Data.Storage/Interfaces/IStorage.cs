@@ -9,8 +9,8 @@ namespace Data.Storage.Interfaces
     {
         ConcurrentDictionary<Guid, string> GetUsersCollection();
 
-        ConcurrentDictionary<Guid, HashSet<Guid>> GetUserFriendsCollection();
+        ConcurrentDictionary<Guid, HashSet<Guid>> GetFriendsCollection();
 
-        ConcurrentDictionary<Guid, GameState> GetUserGameStateCollection();
+        ConcurrentDictionary<Guid, GameState> GetGameStatesCollection();
     }
 }

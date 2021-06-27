@@ -7,6 +7,8 @@ using BusinessLogic.Components.UserComponent.Services.Interfaces;
 using BusinessLogic.Enums;
 using BusinessLogic.Helpers;
 using Data.Access.Entities;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Api.Controllers
 {
@@ -36,13 +38,20 @@ namespace Api.Controllers
                 return BadRequest(operationStatus.ToString());
             }
 
+            // Success.
             return Created(uri: "/", value: user.ToDto<UserDto>());
         }
 
         [HttpPut]
-        [Route("{userid}/state")]
+        [Route("{userId}/state")]
         public async Task<IActionResult> SaveGameState(Guid userId, [FromBody] SaveGameStateRequest request)
         {
+            // Validations.
+            if (!await UserExists(userId))
+            {
+                return NotFound($"User with id {userId} does not exist.");
+            }
+
             // Store game state.
             GameState gameState;
             var operationStatus = await userService
@@ -54,13 +63,20 @@ namespace Api.Controllers
                 return BadRequest(operationStatus.ToString());
             }
 
+            // Success.
             return Ok(value: gameState.ToDto<GameStateDto>());
         }
 
         [HttpGet]
-        [Route("{userid}/state")]
+        [Route("{userId}/state")]
         public async Task<IActionResult> LoadGameState(Guid userId)
         {
+            // Validations.
+            if (!await UserExists(userId))
+            {
+                return NotFound($"User with id {userId} does not exist.");
+            }
+
             // Retrieve game state.
             GameState gameState;
             var operationStatus = await userService
@@ -69,33 +85,65 @@ namespace Api.Controllers
 
             if (operationStatus != OperationStatus.Done)
             {
-                return NotFound(operationStatus.ToString());
+                return BadRequest(operationStatus.ToString());
             }
 
+            // Success.
             return Ok(value: gameState.ToDto<GameStateDto>());
         }
 
         [HttpPut]
-        [Route("{userid}/friends")]
-        public async Task<IActionResult> UpdateFriends(Guid userid)
+        [Route("{userId}/friends")]
+        public async Task<IActionResult> UpdateFriends(Guid userId, [FromBody] UpdateFriendsRequest request)
         {
+            // Validations.
+            if (!await UserExists(userId))
+            {
+                return NotFound($"User with id {userId} does not exist.");
+            }
+
+            // Store new friends for user.
+            HashSet<Guid> friends;
+            var operationStatus = await userService
+                .UpdateFriends(userId, request.Friends, out friends)
+                .ConfigureAwait(false);
+
+            if (operationStatus != OperationStatus.Done)
+            {
+                return BadRequest(operationStatus.ToString());
+            }
+
+            // Success.
+            var dto = new FriendsDto() { Friends = friends };
+            return Ok(value: dto);
+        }
+
+        [HttpGet]
+        [Route("{userId}/friends")]
+        public async Task<IActionResult> GetFriends(Guid userId)
+        {
+            // Validations.
+            if (!await UserExists(userId))
+            {
+                return NotFound($"User with id {userId} does not exist.");
+            }
+
             // TODO
             return Ok();
         }
 
         [HttpGet]
-        [Route("{userid}/friends")]
-        public async Task<IActionResult> GetFriends(Guid userid)
+        public async Task<IActionResult> DebugGetAllUsers()
         {
             // TODO
             return Ok();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> DebugGetAllUsers(Guid userid)
+        private async Task<bool> UserExists(Guid userId)
         {
-            // TODO
-            return Ok();
+            return await userService
+                            .UserExists(userId)
+                            .ConfigureAwait(false);
         }
     }
 }
