@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -94,6 +95,15 @@ namespace Tests.Helpers
             var userRequest = new CreateUserRequest(name);
 
             return await PostAsync<UserDto>(client, userUrl, userRequest, HttpStatusCode.Created);
+        }
+
+        internal static async Task SaveGameState(
+            HttpClient client, Guid userId, int gamesPlayed, long score)
+        {
+            string url = $"user/{userId}/state";
+            var request = new SaveGameStateRequest(gamesPlayed, score);
+
+            await PutAsync(client, url, request, HttpStatusCode.OK);
         }
 
         private static void ValidateMediaType(HttpResponseMessage response)

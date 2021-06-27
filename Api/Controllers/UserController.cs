@@ -8,7 +8,7 @@ using BusinessLogic.Enums;
 using BusinessLogic.Helpers;
 using Data.Access.Entities;
 using System.Collections.Generic;
-using System.Text.Json;
+using System.Linq;
 
 namespace Api.Controllers
 {
@@ -114,8 +114,8 @@ namespace Api.Controllers
             }
 
             // Success.
-            var dto = new FriendsDto() { Friends = friends };
-            return Ok(value: dto);
+            var resultDto = new FriendsDto() { Friends = friends };
+            return Ok(value: resultDto);
         }
 
         [HttpGet]
@@ -128,8 +128,21 @@ namespace Api.Controllers
                 return NotFound($"User with id {userId} does not exist.");
             }
 
-            // TODO
-            return Ok();
+            // Get user friends with their corresponding scores.
+            List<FriendScore> friendScores;
+            var operationStatus = await userService
+                .GetFriendScores(userId, out friendScores) // AXEL TODO: Parse toDto
+                .ConfigureAwait(false);
+
+            if (operationStatus != OperationStatus.Done)
+            {
+                return BadRequest(operationStatus.ToString());
+            }
+
+            // Success.
+            var friendScoreDtoList = friendScores.Select(x => x.ToDto<FriendScoreDto>()).ToList();
+            var resultDto = new FriendScoresDto() { FriendScores = friendScoreDtoList };
+            return Ok(value: resultDto);
         }
 
         [HttpGet]

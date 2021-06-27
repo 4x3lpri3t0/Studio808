@@ -17,5 +17,7 @@ namespace BusinessLogic.Components.UserComponent.Services.Interfaces
         Task<OperationStatus> GetGameState(Guid userId, out GameState gameState);
 
         Task<OperationStatus> UpdateFriends(Guid userId, List<Guid> newFriendsList, out HashSet<Guid> friends);
+
+        Task<OperationStatus> GetFriendScores(Guid userId, out List<FriendScore> friends);
     }
 }

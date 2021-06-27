@@ -8,6 +8,7 @@ using BusinessLogic.Components.UserComponent.Dtos;
 using Xunit;
 using static Tests.Helpers.TestHelper;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Api.Tests
 {
@@ -116,7 +117,7 @@ namespace Api.Tests
         }
 
         [Fact]
-        public async Task Put_GameState_GamesPlayedIsLessThanPrevious_BadRequest()
+        public async Task Put_GameState_DecreasingGamesPlayed_BadRequest()
         {
             // Arrange
             HttpClient client = _factory.CreateClient();
@@ -125,6 +126,21 @@ namespace Api.Tests
             var gameStateRequest = new SaveGameStateRequest(10, 300);
             await PutAsync(client, gameStateUrl, gameStateRequest, HttpStatusCode.OK);
             gameStateRequest = new SaveGameStateRequest(9, 300); // Decrease number of games played
+
+            // Act + Assert
+            await PutAsync(client, gameStateUrl, gameStateRequest, HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task Put_GameState_DecreasingHighscore_BadRequest()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            UserDto user = await CreateUser(client);
+            string gameStateUrl = $"user/{user.Id}/state";
+            var gameStateRequest = new SaveGameStateRequest(10, 300);
+            await PutAsync(client, gameStateUrl, gameStateRequest, HttpStatusCode.OK);
+            gameStateRequest = new SaveGameStateRequest(11, 299); // Decrease highscore
 
             // Act + Assert
             await PutAsync(client, gameStateUrl, gameStateRequest, HttpStatusCode.BadRequest);
@@ -190,13 +206,32 @@ namespace Api.Tests
             var request = new UpdateFriendsRequest(friends);
 
             // Act
-            var friendsResult = await PutAsync<FriendsDto>(client, url, request, HttpStatusCode.OK);
+            var result = await PutAsync<FriendsDto>(client, url, request, HttpStatusCode.OK);
 
             // Assert
-            Assert.NotNull(friendsResult);
-            Assert.NotNull(friendsResult.Friends);
-            Assert.NotEmpty(friendsResult.Friends);
-            Assert.Equal(friends.Count, friendsResult.Friends.Count);
+            Assert.NotNull(result);
+            Assert.NotNull(result.Friends);
+            Assert.NotEmpty(result.Friends);
+            Assert.Equal(friends.Count, result.Friends.Count);
+        }
+
+        [Fact]
+        public async Task Put_Friends_BefriendYourself()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            UserDto user = await CreateUser(client);
+            string url = $"user/{user.Id}/friends";
+            var friends = new List<Guid>() { user.Id }; // Self
+            var request = new UpdateFriendsRequest(friends);
+
+            // Act
+            var result = await PutAsync<FriendsDto>(client, url, request, HttpStatusCode.OK);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.NotNull(result.Friends);
+            Assert.Empty(result.Friends); // 200 but don't store user as own friend
         }
 
         [Fact]
@@ -211,12 +246,12 @@ namespace Api.Tests
             var request = new UpdateFriendsRequest(friends);
 
             // Act
-            var friendsResult = await PutAsync<FriendsDto>(client, url, request, HttpStatusCode.OK);
+            var result = await PutAsync<FriendsDto>(client, url, request, HttpStatusCode.OK);
 
             // Assert
-            Assert.NotNull(friendsResult);
-            Assert.NotNull(friendsResult.Friends);
-            Assert.Empty(friendsResult.Friends); // 200 but don't store unexistent id.
+            Assert.NotNull(result);
+            Assert.NotNull(result.Friends);
+            Assert.Empty(result.Friends); // 200 but don't store unexistent id
         }
 
         [Fact]
@@ -226,18 +261,108 @@ namespace Api.Tests
             HttpClient client = _factory.CreateClient();
             UserDto user = await CreateUser(client);
             string url = $"user/{user.Id}/friends";
-            UserDto friend = await CreateUser(client);
-            var friends = new List<Guid>() { friend.Id, friend.Id }; // Duplicate ids.
+            UserDto friend = await CreateUser(client, "Bob");
+            var friends = new List<Guid>() { friend.Id, friend.Id }; // Duplicate ids
             var request = new UpdateFriendsRequest(friends);
 
             // Act
+            var result = await PutAsync<FriendsDto>(client, url, request, HttpStatusCode.OK);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.NotNull(result.Friends);
+            Assert.NotEmpty(result.Friends);
+            Assert.Single(result.Friends); // Only one is stored
+        }
+
+        [Fact]
+        public async Task Get_Friends_Empty()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            UserDto user = await CreateUser(client);
+            string url = $"user/{user.Id}/friends";
+
+            // Act
+            var result = await GetAsync<FriendScoresDto>(client, url, HttpStatusCode.OK);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.NotNull(result.FriendScores);
+            Assert.Empty(result.FriendScores); // 200 but no friends
+        }
+
+        [Fact]
+        public async Task Get_Friends_Two()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            UserDto user = await CreateUser(client);
+            string url = $"user/{user.Id}/friends";
+            UserDto friend1 = await CreateUser(client, "Bob");
+            UserDto friend2 = await CreateUser(client, "Charlie");
+
+            long scoreFriend1 = 100;
+            long scoreFriend2 = 200;
+            await SaveGameState(client, friend1.Id, 1, scoreFriend1);
+            await SaveGameState(client, friend2.Id, 2, scoreFriend2);
+
+            var friends = new List<Guid>() { friend1.Id, friend2.Id };
+            var request = new UpdateFriendsRequest(friends);
             var friendsResult = await PutAsync<FriendsDto>(client, url, request, HttpStatusCode.OK);
+
+            // Act
+            var result = await GetAsync<FriendScoresDto>(client, url, HttpStatusCode.OK);
 
             // Assert
             Assert.NotNull(friendsResult);
-            Assert.NotNull(friendsResult.Friends);
-            Assert.NotEmpty(friendsResult.Friends);
-            Assert.Equal(1, friendsResult.Friends.Count); // Only one is stored.
+            var storedFriends = result.FriendScores;
+            Assert.NotNull(storedFriends);
+            Assert.NotEmpty(storedFriends);
+            Assert.Equal(2, storedFriends.Count); // Both were stored
+
+            var storedFriend1 = storedFriends.Single(x => x.Id == friend1.Id);
+            var storedFriend2 = storedFriends.Single(x => x.Id == friend2.Id);
+
+            Assert.NotNull(storedFriend1);
+            Assert.NotNull(storedFriend2);
+            Assert.Equal(friend1.Name, storedFriend1.Name);
+            Assert.Equal(friend2.Name, storedFriend2.Name);
+            Assert.Equal(scoreFriend1, storedFriend1.Score);
+            Assert.Equal(scoreFriend2, storedFriend2.Score);
+        }
+
+        [Fact]
+        public async Task Get_Friends_Duplicates()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            UserDto user = await CreateUser(client);
+            string url = $"user/{user.Id}/friends";
+            UserDto friend = await CreateUser(client, "Bob");
+
+            long scoreFriend1 = 42;
+            await SaveGameState(client, friend.Id, 1, scoreFriend1);
+
+            var friends = new List<Guid>() { friend.Id, friend.Id }; // Duplicate
+            var request = new UpdateFriendsRequest(friends);
+            var friendsResult = await PutAsync<FriendsDto>(client, url, request, HttpStatusCode.OK);
+
+            // Act
+            var result = await GetAsync<FriendScoresDto>(client, url, HttpStatusCode.OK);
+
+            // Assert
+            Assert.NotNull(friendsResult);
+            var storedFriends = result.FriendScores;
+            Assert.NotNull(storedFriends);
+            Assert.NotEmpty(storedFriends);
+            Assert.Single(storedFriends); // Stored only once
+
+            var storedFriend1 = storedFriends.Single(x => x.Id == friend.Id);
+
+            Assert.NotNull(storedFriend1);
+            Assert.Equal(friend.Name, storedFriend1.Name);
+            Assert.Equal(scoreFriend1, storedFriend1.Score);
         }
     }
 }

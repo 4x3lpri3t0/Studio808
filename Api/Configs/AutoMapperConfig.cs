@@ -10,6 +10,7 @@ namespace Api.Configs
         {
             CreateMap<User, UserDto>();
             CreateMap<GameState, GameStateDto>();
+            CreateMap<FriendScore, FriendScoreDto>();
         }
     }
 }
