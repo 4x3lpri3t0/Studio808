@@ -148,8 +148,11 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> DebugGetAllUsers()
         {
-            // TODO
-            return Ok();
+            // Retrieve all users.
+            var users = userService.DebugGetAllUsers();
+
+            // Success.
+            return Ok(value: users);
         }
 
         private async Task<bool> UserExists(Guid userId)

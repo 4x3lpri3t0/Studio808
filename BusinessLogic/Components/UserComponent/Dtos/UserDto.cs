@@ -6,7 +6,7 @@ namespace BusinessLogic.Components.UserComponent.Dtos
 {
     public class UserDto : BaseDto
     {
-        [JsonPropertyName("userid")]
+        [JsonPropertyName("id")]
         public Guid Id { get; set; }
 
         [JsonPropertyName("name")]

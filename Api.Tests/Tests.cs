@@ -364,5 +364,30 @@ namespace Api.Tests
             Assert.Equal(friend.Name, storedFriend1.Name);
             Assert.Equal(scoreFriend1, storedFriend1.Score);
         }
+
+        [Fact]
+        public async Task Debug_Get_Users()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            string url = "user";
+            UserDto user1 = await CreateUser(client, "Alice");
+            UserDto user2 = await CreateUser(client, "Bob");
+            UserDto user3 = await CreateUser(client, "Charlie");
+
+            // Act
+            var result = await GetAsync<List<UserDto>>(client, url, HttpStatusCode.OK);
+
+            // Assert
+            Assert.NotNull(result);
+
+            var storedUser1 = result.Single(x => x.Id == user1.Id);
+            var storedUser2 = result.Single(x => x.Id == user2.Id);
+            var storedUser3 = result.Single(x => x.Id == user3.Id);
+
+            Assert.Equal(user1.Name, storedUser1.Name);
+            Assert.Equal(user2.Name, storedUser2.Name);
+            Assert.Equal(user3.Name, storedUser3.Name);
+        }
     }
 }

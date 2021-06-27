@@ -164,5 +164,14 @@ namespace BusinessLogic.Components.UserComponent.Services
 
             return Task.FromResult(OperationStatus.Done);
         }
+
+        public List<User> DebugGetAllUsers()
+        {
+            // Temp solution for DEBUG purposes.
+            return this.storage
+                .GetUsersCollection()
+                .Select(kv => new User(kv.Key, kv.Value))
+                .ToList();
+        }
     }
 }
