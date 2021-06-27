@@ -10,5 +10,7 @@ namespace BusinessLogic.Components.UserComponent.Services.Interfaces
         Task<OperationStatus> CreateUser(string name, out User user);
 
         Task<OperationStatus> UpdateGameState(Guid userId, int gamesPlayed, long score, out GameState gameState);
+
+        Task<OperationStatus> GetGameState(Guid userId, out GameState gameState);
     }
 }

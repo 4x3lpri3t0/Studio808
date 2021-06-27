@@ -25,7 +25,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
         {
-            // Create and store the new user.
+            // Create and store new user.
             User user;
             var operationStatus = await userService
                 .CreateUser(request.Name, out user)
@@ -43,7 +43,7 @@ namespace Api.Controllers
         [Route("{userid}/state")]
         public async Task<IActionResult> SaveGameState(Guid userId, [FromBody] SaveGameStateRequest request)
         {
-            // Store the game state.
+            // Store game state.
             GameState gameState;
             var operationStatus = await userService
                 .UpdateGameState(userId, request.GamesPlayed, request.Score, out gameState)
@@ -59,10 +59,20 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("{userid}/state")]
-        public async Task<IActionResult> LoadGameState(Guid userid)
+        public async Task<IActionResult> LoadGameState(Guid userId)
         {
-            // TODO
-            return Ok();
+            // Retrieve game state.
+            GameState gameState;
+            var operationStatus = await userService
+                .GetGameState(userId, out gameState)
+                .ConfigureAwait(false);
+
+            if (operationStatus != OperationStatus.Done)
+            {
+                return NotFound(operationStatus.ToString());
+            }
+
+            return Ok(value: gameState.ToDto<GameStateDto>());
         }
 
         [HttpPut]

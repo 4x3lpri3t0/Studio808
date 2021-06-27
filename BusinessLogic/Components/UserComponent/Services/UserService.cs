@@ -73,5 +73,19 @@ namespace BusinessLogic.Components.UserComponent.Services
 
             return Task.FromResult(OperationStatus.Done);
         }
+
+        public Task<OperationStatus> GetGameState(Guid userId, out GameState gameState)
+        {
+            var gameStateCollection = this.storage.GetUserGameStateCollection();
+
+            bool successfulGet = gameStateCollection.TryGetValue(userId, out gameState);
+            if (!successfulGet)
+            {
+                // Likely due to an incorrect user id.
+                return Task.FromResult(OperationStatus.NotFound);
+            }
+
+            return Task.FromResult(OperationStatus.Done);
+        }
     }
 }

@@ -3,13 +3,12 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Api;
 using Api.Requests;
 using BusinessLogic.Components.UserComponent.Dtos;
 using Xunit;
 using static Tests.Helpers.TestHelper;
 
-namespace ApiTests
+namespace Api.Tests
 {
     public class Tests : IClassFixture<WebApplicationFactory<Startup>>
     {
@@ -21,7 +20,7 @@ namespace ApiTests
         }
 
         [Fact]
-        public async Task Post_User_WhenMissingUsername_BadRequest()
+        public async Task Post_User_MissingUsername_BadRequest()
         {
             // Arrange
             HttpClient client = _factory.CreateClient();
@@ -33,7 +32,7 @@ namespace ApiTests
         }
 
         [Fact]
-        public async Task Post_User_WhenEmptyUsername_BadRequest()
+        public async Task Post_User_EmptyUsername_BadRequest()
         {
             // Arrange
             HttpClient client = _factory.CreateClient();
@@ -64,7 +63,7 @@ namespace ApiTests
         }
 
         [Fact]
-        public async Task Put_GameState_WhenNegativeScore_BadRequest()
+        public async Task Put_GameState_NegativeScore_BadRequest()
         {
             // Arrange
             HttpClient client = _factory.CreateClient();
@@ -77,7 +76,7 @@ namespace ApiTests
         }
 
         [Fact]
-        public async Task Put_GameState_WhenMissingGamesPlayed_BadRequest()
+        public async Task Put_GameState_MissingGamesPlayed_BadRequest()
         {
             // Arrange
             HttpClient client = _factory.CreateClient();
@@ -94,14 +93,8 @@ namespace ApiTests
         {
             // Arrange
             HttpClient client = _factory.CreateClient();
-            string userUrl = "user";
-            var userRequest = new CreateUserRequest("Alice");
-
-            // Act
-            var userResponse = await PostAsync<UserDto>(client, userUrl, userRequest, HttpStatusCode.Created);
-
-            // Arrange
-            string gameStateUrl = $"user/{userResponse.Id}/state";
+            UserDto user = await CreateUser(client);
+            string gameStateUrl = $"user/{user.Id}/state";
             var gameStateRequest = new SaveGameStateRequest(10, 300);
 
             // Act + Assert
@@ -109,7 +102,7 @@ namespace ApiTests
         }
 
         [Fact]
-        public async Task Put_GameState_WhenNonExistentUser_BadRequest()
+        public async Task Put_GameState_NonExistentUser_BadRequest()
         {
             // Arrange
             HttpClient client = _factory.CreateClient();
@@ -122,28 +115,66 @@ namespace ApiTests
         }
 
         [Fact]
-        public async Task Put_GameState_WhenGamesPlayedIsLessThanPrevious_BadRequest()
+        public async Task Put_GameState_GamesPlayedIsLessThanPrevious_BadRequest()
         {
             // Arrange
             HttpClient client = _factory.CreateClient();
-            string userUrl = "user";
-            var userRequest = new CreateUserRequest("Alice");
-
-            // Act
-            var userResponse = await PostAsync<UserDto>(client, userUrl, userRequest, HttpStatusCode.Created);
-
-            // Arrange
-            string gameStateUrl = $"user/{userResponse.Id}/state";
+            UserDto user = await CreateUser(client);
+            string gameStateUrl = $"user/{user.Id}/state";
             var gameStateRequest = new SaveGameStateRequest(10, 300);
-
-            // Act + Assert
             await PutAsync(client, gameStateUrl, gameStateRequest, HttpStatusCode.OK);
-
-            // Arrange (decrease number of games played)
-            gameStateRequest = new SaveGameStateRequest(9, 300);
+            gameStateRequest = new SaveGameStateRequest(9, 300); // Decrease number of games played
 
             // Act + Assert
             await PutAsync(client, gameStateUrl, gameStateRequest, HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task Get_GameState_NonExistentUser_NotFound()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            Guid nonExistentUserId = Guid.NewGuid();
+            string url = $"user/{nonExistentUserId}/state";
+
+            // Act
+            var userResponse = await GetAsync(client, url, HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task Get_GameState_NewUser()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            UserDto user = await CreateUser(client);
+            string url = $"user/{user.Id}/state";
+
+            // Act
+            var gameState = await GetAsync<GameStateDto>(client, url, HttpStatusCode.OK);
+
+            // Assert
+            Assert.Equal(0, gameState.GamesPlayed);
+            Assert.Equal(0, gameState.Score);
+        }
+
+        [Fact]
+        public async Task Get_GameState_AfterUpdate()
+        {
+            // Arrange
+            HttpClient client = _factory.CreateClient();
+            UserDto user = await CreateUser(client);
+            string url = $"user/{user.Id}/state";
+            int gamesPlayedNewValue = 42;
+            long scoreNewValue = 1337133713371337L;
+            var gameStateRequest = new SaveGameStateRequest(gamesPlayedNewValue, scoreNewValue);
+            await PutAsync(client, url, gameStateRequest, HttpStatusCode.OK);
+
+            // Act
+            var gameState = await GetAsync<GameStateDto>(client, url, HttpStatusCode.OK);
+
+            // Assert
+            Assert.Equal(gamesPlayedNewValue, gameState.GamesPlayed);
+            Assert.Equal(scoreNewValue, gameState.Score);
         }
     }
 }
