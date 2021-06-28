@@ -2,15 +2,11 @@
 
 - [API Definition](#api-definition)
   * [Create User](#create-user)
-    + [Response](#response)
   * [Save Game State](#save-game-state)
   * [Load Game State](#load-game-state)
-    + [Response](#response-1)
   * [Update Friends](#update-friends)
   * [Get Friends](#get-friends)
-    + [Response](#response-2)
   * [Debug: Get All Users](#debug--get-all-users)
-    + [Response](#response-3)
 - [Execution & Testing](#execution---testing)
 - [Assumptions, Suggestions, Improvements](#assumptions--suggestions--improvements)
 
