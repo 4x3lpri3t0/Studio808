@@ -173,4 +173,4 @@ GET /user
 - It's a general good practice to use [Github flow](https://guides.github.com/introduction/flow/). Since I'm the only contributor to this project (and I'm not working on multiple features on parallel), I've been using `main/master` directly. Otherwise, it's recommended to work on branches and submit a pull request to master once done.
 - Tests have been incorporated progressively in a TDD fashion. Every time new functionality was being added, relevant tests were included in the commit as well. This is to prove that the new features are working as expected and therefore avoid pushing code that compiles but might have flawed logic.
 - The AAA (Arrange, Act, Assert) pattern is a common way of writing tests. That being said, I wouldn't enforce it too much if the team finds it annoying.
-- I used [Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1#services-injected-into-startup) when it makes sense.
+- I've used [Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1#services-injected-into-startup) when it made sense.
